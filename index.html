@@ -3,178 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PANG..WOW..WOW | POS</title>
+    <title>PANG..WOW..WOW | Cloud Master</title>
     
-    <!-- PWA Settings (สำหรับการติดตั้งไอคอนบน Android/iPhone) -->
+    <!-- PWA Settings -->
     <meta name="theme-color" content="#f97316">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PANG..WOW">
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
 
-    <!-- นำเข้าไลบรารีที่จำเป็น -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { 
-            font-family: 'Kanit', sans-serif; 
-            background-color: #fffaf5;
-            -webkit-tap-highlight-color: transparent;
-            overscroll-behavior-y: contain;
-        }
-        /* ซ่อน scrollbar */
+        body { font-family: 'Kanit', sans-serif; background-color: #fffaf5; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* อนิเมชันทางสายตา (Steve Jobs Style) */
-        @keyframes pop-spring { 
-            0% { transform: scale(0.5); opacity: 0; } 
-            50% { transform: scale(1.15); opacity: 1; } 
-            100% { transform: scale(1); } 
-        }
-        @keyframes gentle-float { 
-            0%, 100% { transform: translateY(0px) rotate(0deg); } 
-            50% { transform: translateY(-4px) rotate(1deg); } 
-        }
-        @keyframes joyful-burst { 
-            0% { transform: scale(0.9); opacity: 0; } 
-            100% { transform: scale(1); opacity: 1; } 
-        }
-        @keyframes rotate-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .animate-pop-spring { animation: pop-spring 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .animate-float { animation: gentle-float 4s ease-in-out infinite; }
-        .animate-joy { animation: joyful-burst 0.3s ease-out; }
-        .animate-spin-custom { animation: rotate-spin 1s linear infinite; }
         
-        .tap-effect { transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-        .tap-effect:active { transform: scale(0.94); }
-        .tap-effect-heavy:active { transform: scale(0.85); }
+        @keyframes pop-spring { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); } }
+        @keyframes joyful-burst { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes slide-up { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes float-bread { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-8px) rotate(4deg); } }
 
-        .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
+        .animate-pop { animation: pop-spring 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .animate-joy { animation: joyful-burst 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .animate-slide-up { animation: slide-up 0.5s cubic-bezier(0.32, 0.72, 0, 1); }
+        .animate-float { animation: float-bread 3.5s ease-in-out infinite; }
+        
+        .premium-header {
+            background: linear-gradient(-45deg, #f97316, #fb923c, #fbbf24, #f59e0b);
+            background-size: 400% 400%;
+            animation: gradient-move 10s ease infinite;
+        }
+        @keyframes gradient-move { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .tap-effect { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .tap-effect:active { transform: scale(0.92); filter: brightness(0.92); }
+        
+        .glass-island {
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 🌟 แก้ไข: เพิ่ม Padding มหาศาลเพื่อให้เลื่อนพ้นแถบเมนู 🌟 */
+        .admin-content-scroll { 
+            padding-bottom: 220px !important; 
+        }
+        
+        .emoji-grid-picker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            max-height: 140px;
+            overflow-y: auto;
+            padding: 12px;
+            background: #fff;
+            border-radius: 1.5rem;
+            border: 2px solid #fed7aa;
+        }
+
+        .success-flash { animation: pulse-green 1s ease-out; }
+        @keyframes pulse-green { 0% { background-color: transparent; } 50% { background-color: rgba(34, 197, 94, 0.2); } 100% { background-color: transparent; } }
+        
+        .confetti-piece { position: absolute; font-size: 24px; animation: confetti-fall 2.5s linear forwards; pointer-events: none; z-index: 100; }
+        @keyframes confetti-fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
     </style>
 </head>
 <body class="text-gray-900 select-none">
     <div id="root"></div>
 
+    <!-- Firebase SDK Implementation -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        window.FirebaseCloud = { 
+            db, auth, appId, 
+            collection, doc, setDoc, addDoc, onSnapshot, updateDoc, deleteDoc, query, orderBy,
+            signInAnonymously, signInWithCustomToken, onAuthStateChanged 
+        };
+    </script>
+
     <script type="text/babel">
-        const { useState, useMemo, useEffect, useCallback } = React;
+        const { useState, useMemo, useEffect, useCallback, useRef } = React;
 
-        // ==========================================
-        // CONFIGURATION
-        // ==========================================
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPlMuRuHLfZ9ijc_uWySVLYdDDEnM3QmeMzwEeBTIfVatVSd5RUSZFHQf0JmxfP6Nj/exec"; 
-
-        const INITIAL_FLAVORS = [
-            { id: 'pork_floss', name: 'หมูหยอง', price: 25, emoji: '🐷', bg: 'bg-[#FFEDD5]' },
-            { id: 'pandan', name: 'สังขยาใบเตย', price: 25, emoji: '🌿', bg: 'bg-[#D1FAE5]' },
-            { id: 'thai_tea', name: 'สังขยาชาไทย', price: 25, emoji: '🧋', bg: 'bg-[#FFEDD5]' },
-            { id: 'butter_sugar', name: 'เนยน้ำตาล', price: 25, emoji: '🧈', bg: 'bg-[#FEF3C7]' },
-        ];
-
-        // Icons System (เพิ่มคอมโพเนนต์ที่ขาดหายไปเพื่อแก้ Error #130)
         const IconSVG = ({ children, size = 24, className = "" }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
         );
+
         const Icons = {
-            Store: (p) => <IconSVG {...p}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></IconSVG>,
-            ShoppingBag: (p) => <IconSVG {...p}><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></IconSVG>,
-            Dashboard: (p) => <IconSVG {...p}><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></IconSVG>,
-            Check: (p) => <IconSVG {...p}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></IconSVG>,
-            ChevronLeft: (p) => <IconSVG {...p}><polyline points="15 18 9 12 15 6"></polyline></IconSVG>,
-            MapPin: (p) => <IconSVG {...p}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></IconSVG>,
+            ShoppingBag: (p) => <IconSVG {...p}><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"></path></IconSVG>,
+            Check: (p) => <IconSVG {...p}><path d="M20 6L9 17l-5-5"></path></IconSVG>,
             Minus: (p) => <IconSVG {...p}><line x1="5" y1="12" x2="19" y2="12"></line></IconSVG>,
             Plus: (p) => <IconSVG {...p}><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></IconSVG>,
             QrCode: (p) => <IconSVG {...p}><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></IconSVG>,
-            Banknote: (p) => <IconSVG {...p}><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></IconSVG>,
-            LogOut: (p) => <IconSVG {...p}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></IconSVG>,
-            Refresh: (p) => <IconSVG {...p}><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></IconSVG>,
-            Edit: (p) => <IconSVG {...p}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></IconSVG>,
-            Trash: (p) => <IconSVG {...p}><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></IconSVG>,
-            PackageOpen: (p) => <IconSVG {...p}><path d="M22 12V8h-6L12 4 6 8H2v4"></path><path d="M2 12v6h20v-6"></path></IconSVG>,
-            Sparkles: (p) => <IconSVG {...p}><path d="M12 3v18M3 12h18"></path></IconSVG>,
-            Settings: (p) => <IconSVG {...p}><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></IconSVG>
+            Banknote: (p) => <IconSVG {...p}><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle></IconSVG>,
+            ChevronLeft: (p) => <IconSVG {...p}><path d="M15 18l-6-6 6-6"></path></IconSVG>,
+            Settings: (p) => <IconSVG {...p}><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></IconSVG>,
+            Refresh: (p) => <IconSVG {...p} className={`animate-spin-custom ${p.className || ''}`}><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></IconSVG>,
+            Dashboard: (p) => <IconSVG {...p}><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></IconSVG>,
+            LogOut: (p) => <IconSVG {...p}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></IconSVG>,
+            Package: (p) => <IconSVG {...p}><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></IconSVG>,
+            Edit: (p) => <IconSVG {...p}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></IconSVG>,
+            Trash: (p) => <IconSVG {...p}><path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></IconSVG>,
+            MapPin: (p) => <IconSVG {...p}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></IconSVG>,
+            CloudCheck: (p) => <IconSVG {...p}><path d="M17.5 19c2.5 0 4.5-2 4.5-4.5 0-2.3-1.7-4.1-3.9-4.4-.7-3.4-3.7-6.1-7.1-6.1-3 0-5.7 2-6.7 4.8C2.1 9.3 1 11 1 13c0 2.8 2.2 5 5 5h1"/><path d="m9 16 3 3 5-5"/></IconSVG>
         };
 
-        function App() {
-            const [appMode, setAppMode] = useState(null); 
-            const [adminTab, setAdminTab] = useState('dashboard'); 
+        const EMOJI_OPTIONS = [
+            '🍞', '🥐', '🥖', '🥨', '🥯', '🥞', '🧀', '🐷', '🌿', '🧈', '🧋', '🍯', '🍫', '🍵', '🌶️', '🥩', '🥓', '🥥', '🍌', '🥛', '🍼', '🥧', '🧁', '🍩', '🍪', '🥜', '🍓', '🍇', '🍒', '🥭'
+        ];
 
-            // Persistence & LocalStorage
-            const [products, setProducts] = useState(() => {
-                const saved = localStorage.getItem('pang_wow_products');
-                return saved ? JSON.parse(saved) : INITIAL_FLAVORS;
-            });
-            const [salesData, setSalesData] = useState(() => {
-                const saved = localStorage.getItem('pang_wow_sales');
-                return saved ? JSON.parse(saved) : [];
-            });
-            const [storeLocation, setStoreLocation] = useState(localStorage.getItem('pang_wow_loc') || 'สาขาหลัก'); 
-            const [isLoadingData, setIsLoadingData] = useState(false);
-            const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString('th-TH'));
-            
+        function ConfettiEffect() {
+            const emojis = ['🍞', '🥐', '✨', '🥖', '🥨', '🥯', '🥞', '🥓', '🍯', '🧈'];
+            const confettiArr = useMemo(() => Array.from({ length: 30 }), []);
+            return (
+                <div className="fixed inset-0 overflow-hidden pointer-events-none z-[100]">
+                    {confettiArr.map((_, i) => (
+                        <div key={i} className="confetti-piece" style={{
+                            left: `${Math.random() * 100}vw`,
+                            animationDelay: `${Math.random() * 2}s`,
+                            animationDuration: `${2 + Math.random() * 2}s`
+                        }}>{emojis[i % emojis.length]}</div>
+                    ))}
+                </div>
+            );
+        }
+
+        function App() {
+            const [user, setUser] = useState(null);
+            const [appMode, setAppMode] = useState('staff'); 
+            const [adminTab, setAdminTab] = useState('dashboard');
+            const [products, setProducts] = useState([]);
+            const [salesData, setSalesData] = useState([]);
             const [cart, setCart] = useState({});
             const [paymentMode, setPaymentMode] = useState(null); 
             const [cashReceived, setCashReceived] = useState(null);
-            const [isSubmitting, setIsSubmitting] = useState(false);
             const [showSuccess, setShowSuccess] = useState(false);
-
-            const [editingProduct, setEditingProduct] = useState(null);
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [storeLocation, setStoreLocation] = useState('กำลังเชื่อมต่อ...');
+            
+            const [showLogin, setShowLogin] = useState(false);
+            const [password, setPassword] = useState('');
             const [isEditingLocation, setIsEditingLocation] = useState(false);
             const [tempLocation, setTempLocation] = useState('');
+            const [editingProduct, setEditingProduct] = useState(null);
+            const [selectedEmoji, setSelectedEmoji] = useState('🍞');
 
-            // Data Fetching (ดึงข้อมูลยอดขายทั้งหมด)
-            const fetchSalesData = useCallback(async (silent = false) => {
-                if (!GOOGLE_SCRIPT_URL) return;
-                if (!silent) setIsLoadingData(true);
-                try {
-                    const response = await fetch(GOOGLE_SCRIPT_URL);
-                    const data = await response.json();
-                    
-                    if (Array.isArray(data)) {
-                        const sortedData = data.sort((a, b) => b.timestamp - a.timestamp);
-                        setSalesData(sortedData);
-                        localStorage.setItem('pang_wow_sales', JSON.stringify(sortedData));
-                        
-                        if (sortedData.length > 0 && sortedData[0].location) {
-                            setStoreLocation(sortedData[0].location);
-                            localStorage.setItem('pang_wow_loc', sortedData[0].location);
+            const [toast, setToast] = useState(null);
+            const [flashingStockId, setFlashingStockId] = useState(null);
+
+            // Authentication (Rule 3)
+            useEffect(() => {
+                const initAuth = async () => {
+                    if (!window.FirebaseCloud) return;
+                    const { auth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = window.FirebaseCloud;
+                    try {
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            await signInAnonymously(auth);
                         }
-                    }
-                } catch (error) {
-                    console.warn("Fetch failed, using local cache");
-                } finally {
-                    if (!silent) setIsLoadingData(false);
-                }
+                    } catch (err) { console.error("Auth Fail:", err); }
+                    const unsubscribe = onAuthStateChanged(auth, setUser);
+                    return () => unsubscribe();
+                };
+                initAuth();
             }, []);
 
+            // Data Sync (Rule 3 Guarded)
             useEffect(() => {
-                if (appMode) fetchSalesData();
-            }, [appMode, fetchSalesData]);
+                if (!user || !window.FirebaseCloud) return;
+                const { db, appId, collection, doc, onSnapshot } = window.FirebaseCloud;
 
-            // Filter Dates
-            const availableDates = useMemo(() => {
-                const dates = salesData.map(order => order.dateStr).filter(Boolean);
-                const uniqueDates = [...new Set(dates)];
-                const todayStr = new Date().toLocaleDateString('th-TH');
-                if (!uniqueDates.includes(todayStr)) uniqueDates.unshift(todayStr);
-                return uniqueDates;
-            }, [salesData]);
+                const unsubProds = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bread_products'), (snap) => {
+                    setProducts(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+                }, (err) => console.error(err));
 
-            // Totals
+                const unsubSales = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bread_sales'), (snap) => {
+                    setSalesData(snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => b.timestamp - a.timestamp));
+                }, (err) => console.error(err));
+
+                const unsubConfig = onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'bread_config', 'store_info'), (snap) => {
+                    if (snap.exists()) setStoreLocation(snap.data().location);
+                    else setStoreLocation('สาขาหลัก');
+                }, (err) => console.error(err));
+
+                return () => { unsubProds(); unsubSales(); unsubConfig(); };
+            }, [user]);
+
             const { totalItems, totalPrice } = useMemo(() => {
                 let items = 0; let price = 0;
                 Object.entries(cart).forEach(([id, qty]) => {
-                    const product = products.find(p => p.id === id);
-                    if (product) { items += qty; price += qty * product.price; }
+                    const p = products.find(prod => prod.id === id);
+                    if (p) { items += qty; price += qty * p.price; }
                 });
                 return { totalItems: items, totalPrice: price };
             }, [cart, products]);
@@ -190,8 +225,9 @@
 
             const dashboardStats = useMemo(() => {
                 let revenue = 0; let itemsSold = 0; const itemCounts = {};
+                const today = new Date().toLocaleDateString('th-TH');
                 salesData.forEach(order => {
-                    if (order && order.dateStr === selectedDate) {
+                    if (order && order.dateStr === today) {
                         revenue += (order.totalPrice || 0);
                         itemsSold += (order.totalItems || 0);
                         if (order.items) {
@@ -201,312 +237,325 @@
                         }
                     }
                 });
-                const topSelling = Object.entries(itemCounts)
-                    .map(([id, qty]) => {
-                        const product = products.find(p => p.id === id) || INITIAL_FLAVORS.find(p => p.id === id);
-                        return { name: product?.name || 'รายการเก่า', emoji: product?.emoji || '🍞', qty };
-                    })
-                    .sort((a, b) => b.qty - a.qty);
-                return { revenue, itemsSold, topSelling };
-            }, [salesData, products, selectedDate]);
+                return { revenue, itemsSold, itemCounts };
+            }, [salesData]);
 
+            // Database Handlers
             const handleCheckout = async () => {
-                if (totalItems === 0) return;
+                if (!user || totalItems === 0 || isSubmitting) return;
                 setIsSubmitting(true);
                 try {
-                    const itemsTextForSheet = {};
-                    Object.entries(cart).forEach(([id, qty]) => {
-                        const prod = products.find(p => p.id === id);
-                        if (prod) itemsTextForSheet[prod.name] = qty;
-                    });
-
-                    const newOrder = {
-                        items: cart, itemsText: itemsTextForSheet, totalItems, totalPrice,
-                        paymentMode, location: storeLocation, timestamp: Date.now(),
+                    const { db, appId, collection, addDoc, doc, setDoc } = window.FirebaseCloud;
+                    const order = {
+                        items: cart, totalItems, totalPrice, paymentMode,
+                        location: storeLocation, timestamp: Date.now(),
                         dateStr: new Date().toLocaleDateString('th-TH'),
-                        timeStr: new Date().toLocaleTimeString('th-TH')
+                        timeStr: new Date().toLocaleTimeString('th-TH'),
+                        userId: user.uid
                     };
-                    
-                    const updatedSales = [newOrder, ...salesData];
-                    setSalesData(updatedSales);
-                    localStorage.setItem('pang_wow_sales', JSON.stringify(updatedSales));
-
-                    if (GOOGLE_SCRIPT_URL) {
-                        fetch(GOOGLE_SCRIPT_URL, {
-                            method: 'POST', mode: 'no-cors',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(newOrder)
-                        }).catch(e => console.warn("Sync failed"));
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bread_sales'), order);
+                    for (const [id, qty] of Object.entries(cart)) {
+                        const p = products.find(prod => prod.id === id);
+                        if (p) {
+                            const pRef = doc(db, 'artifacts', appId, 'public', 'data', 'bread_products', id);
+                            await setDoc(pRef, { stock: Math.max(0, p.stock - qty) }, { merge: true });
+                        }
                     }
-
                     setShowSuccess(true);
                     setTimeout(() => {
                         setShowSuccess(false);
-                        setCart({}); setPaymentMode(null); setCashReceived(null);
-                    }, 1500);
-                } catch (err) { alert("Checkout Error"); } 
-                finally { setIsSubmitting(false); }
+                        setCart({}); setPaymentMode(null); setCashReceived(null); setIsSubmitting(false);
+                    }, 2800);
+                } catch (err) { setIsSubmitting(false); }
             };
 
-            const handleUpdateLocation = (e) => { 
-                e.preventDefault(); 
-                const loc = tempLocation || 'สาขาหลัก';
-                setStoreLocation(loc); 
-                localStorage.setItem('pang_wow_loc', loc);
-                setIsEditingLocation(false); 
+            const updateCloudStock = async (id, val) => {
+                if (!user) return;
+                const { db, appId, doc, setDoc } = window.FirebaseCloud;
+                const p = products.find(prod => prod.id === id);
+                if (p) {
+                    const pRef = doc(db, 'artifacts', appId, 'public', 'data', 'bread_products', id);
+                    await setDoc(pRef, { stock: Math.max(0, p.stock + val) }, { merge: true });
+                    setFlashingStockId(id);
+                    showToast(`อัปเดตสต็อก ${p.name} แล้ว ✨`);
+                    setTimeout(() => setFlashingStockId(null), 1000);
+                }
             };
 
-            const handleSaveProduct = (e) => {
+            const showToast = (msg) => {
+                setToast(msg);
+                setTimeout(() => setToast(null), 3000);
+            };
+
+            const checkAdminPassword = (e) => {
                 e.preventDefault();
+                if (password === '8888') { setAppMode('admin'); setShowLogin(false); setPassword(''); }
+                else { showToast('รหัสผิดพลาด ❌'); }
+            };
+
+            const handleUpdateLocation = async (e) => {
+                e.preventDefault();
+                if (!user) return;
+                const { db, appId, doc, setDoc } = window.FirebaseCloud;
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bread_config', 'store_info'), { location: tempLocation }, { merge: true });
+                setIsEditingLocation(false);
+                showToast("เปลี่ยนทำเลขายแล้ว 📍");
+            };
+
+            const handleSaveProduct = async (e) => {
+                e.preventDefault();
+                if (!user) return;
+                const { db, appId, doc, setDoc } = window.FirebaseCloud;
                 const formData = new FormData(e.target);
                 const productId = editingProduct?.id || `prod_${Date.now()}`;
                 const newProduct = {
                     id: productId, name: formData.get('name'), price: Number(formData.get('price')),
-                    emoji: formData.get('emoji') || '🍞', bg: 'bg-orange-50'
+                    emoji: selectedEmoji, bg: 'bg-orange-50', stock: editingProduct?.stock || 0
                 };
-                const updated = editingProduct?.id ? products.map(p => p.id === editingProduct.id ? newProduct : p) : [...products, newProduct];
-                setProducts(updated);
-                localStorage.setItem('pang_wow_products', JSON.stringify(updated));
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bread_products', productId), newProduct, { merge: true });
                 setEditingProduct(null);
+                showToast("บันทึกเมนูเรียบร้อย 🍞");
             };
 
-            const handleDeleteProduct = (id) => {
-                if(!confirm('คุณต้องการลบเมนูนี้ใช่หรือไม่?')) return;
-                const updated = products.filter(p => p.id !== id);
-                setProducts(updated);
-                localStorage.setItem('pang_wow_products', JSON.stringify(updated));
+            const startEditingProduct = (p) => {
+                setEditingProduct(p);
+                setSelectedEmoji(p?.emoji || '🍞');
             };
 
-            // Views
-            if (!appMode) {
-                return (
-                    <div className="flex flex-col items-center justify-center h-screen bg-orange-50/50 max-w-md mx-auto p-6 relative overflow-hidden">
-                        <div className="z-10 flex flex-col items-center w-full text-center animate-joy">
-                            <div className="w-28 h-28 bg-gradient-to-br from-yellow-300 to-orange-500 rounded-[2.5rem] flex items-center justify-center shadow-2xl mb-8 transform rotate-3 animate-float">
-                                <span className="text-6xl">🍞</span>
-                            </div>
-                            <h1 className="text-5xl font-black text-amber-950 mb-1 tracking-tighter">PANG..WOW!</h1>
-                            <p className="text-orange-600 font-bold mb-12 text-xl bg-orange-100 px-6 py-2 rounded-full border border-orange-200">อร่อยทุกไส้ 25 บาท</p>
-                            <div className="w-full flex flex-col gap-5">
-                                <button onClick={() => setAppMode('staff')} className="w-full bg-white p-6 rounded-[2.2rem] shadow-xl tap-effect flex items-center gap-5 border-2 border-orange-50 group hover:border-orange-400 transition-all">
-                                    <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition-all"><Icons.ShoppingBag size={30} /></div>
-                                    <div className="text-left"><h2 className="text-2xl font-black text-amber-950">พนักงานขาย</h2><p className="text-orange-700/60 font-bold">เปิดหน้าคิดเงิน POS</p></div>
-                                </button>
-                                <button onClick={() => setAppMode('admin')} className="w-full bg-white p-6 rounded-[2.2rem] shadow-xl tap-effect flex items-center gap-5 border-2 border-orange-50 group hover:border-black transition-all">
-                                    <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-700 group-hover:bg-black group-hover:text-white transition-all"><Icons.Dashboard size={30} /></div>
-                                    <div className="text-left"><h2 className="text-2xl font-black text-amber-950">เจ้าของร้าน</h2><p className="text-amber-700/60 font-bold">แดชบอร์ด & ตั้งค่า</p></div>
-                                </button>
-                            </div>
+            // VIEW: STAFF
+            if (appMode === 'staff') {
+                if (showSuccess) return (
+                    <div className="flex flex-col items-center justify-center h-screen premium-header select-none animate-joy">
+                        <ConfettiEffect />
+                        <div className="bg-white p-12 rounded-[4rem] shadow-2xl flex flex-col items-center border-8 border-white/30">
+                            <div className="w-28 h-28 bg-green-500 rounded-full flex items-center justify-center text-white mb-8 animate-pop shadow-xl"><Icons.Check size={60} /></div>
+                            <h2 className="text-5xl font-black text-amber-950 mb-2 tracking-tighter uppercase">Success!</h2>
+                            <p className="text-orange-600 font-bold text-xl text-center">คลาวด์บันทึกยอดและ<br/>หักสต็อกเรียบร้อยจ้า</p>
                         </div>
                     </div>
                 );
-            }
-
-            if (appMode === 'staff') {
-                if (showSuccess) {
-                    return (
-                        <div className="flex flex-col items-center justify-center h-screen bg-orange-50 max-w-md mx-auto font-sans relative">
-                            <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl flex flex-col items-center animate-joy border-4 border-orange-100">
-                                <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg mb-6 animate-pop-spring text-white"><Icons.Check size={60} /></div>
-                                <h2 className="text-4xl font-black text-amber-950 mb-2">เรียบร้อย!</h2>
-                                <p className="text-orange-600 font-bold text-lg">ออเดอร์ถูกบันทึกแล้วจ้า</p>
-                            </div>
-                        </div>
-                    );
-                }
 
                 return (
-                    <div className="flex flex-col h-screen bg-[#FFF9F0] max-w-md mx-auto relative overflow-hidden select-none">
-                        <div className="px-5 pt-6 pb-2 shrink-0 z-10">
-                            <div className="flex justify-between items-center mb-5">
-                                <button onClick={() => setAppMode(null)} className="flex items-center gap-1.5 text-orange-900/40 font-black tap-effect text-lg hover:text-orange-900 transition-colors"><Icons.ChevronLeft size={24} /> ย้อนกลับ</button>
-                                <div className="flex items-center gap-2 bg-white text-orange-800 px-4 py-1.5 rounded-full text-xs font-black shadow-sm border border-orange-100 max-w-[180px] truncate"><Icons.MapPin size={12} className="text-orange-500" /> {storeLocation}</div>
+                    <div className="max-w-md mx-auto h-screen flex flex-col bg-[#FFF9F0] relative overflow-hidden select-none">
+                        <div className="p-4 shrink-0 z-10">
+                            <div className="flex justify-between items-center mb-3 px-1">
+                                <span className="bg-white px-3 py-1.5 rounded-full text-[10px] font-black text-orange-800 shadow-sm border border-orange-100 truncate max-w-[150px]">📍 {storeLocation}</span>
+                                <button onClick={() => setShowLogin(true)} className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-orange-600 tap-effect shadow-md border-2 border-orange-100"><Icons.Settings /></button>
                             </div>
-                            <div className="bg-gradient-to-br from-orange-500 to-amber-600 text-white rounded-[2.5rem] p-7 shadow-2xl relative overflow-hidden border-2 border-orange-400">
-                                <div className="absolute top-[-20%] right-[-10%] text-[9rem] opacity-10 rotate-12 pointer-events-none italic font-black">WOW</div>
-                                <div className="flex justify-between items-start mb-2 relative z-10">
-                                    <span className="text-orange-100 font-bold text-lg flex items-center gap-2"><Icons.ShoppingBag size={22} /> {totalItems} ชิ้นในถุง</span>
-                                    {totalItems > 0 && <button onClick={() => setCart({})} className="bg-white/20 px-4 py-1.5 rounded-full font-black text-xs tap-effect border border-white/20 backdrop-blur-md">ล้างถุง</button>}
+                            <div className="premium-header text-white rounded-[2.5rem] p-7 shadow-2xl relative overflow-hidden border-2 border-white/20">
+                                <div className="absolute top-[-20%] right-[-10%] text-[8rem] opacity-20 italic font-black animate-float">PANG</div>
+                                <div className="flex justify-between items-start mb-1 relative z-10">
+                                    <span className="font-bold flex items-center gap-2 opacity-90 tracking-tight"><Icons.ShoppingBag size={20}/> {totalItems} ชิ้น</span>
+                                    <h1 className="font-black text-lg tracking-tighter uppercase opacity-80 italic">POS Cloud</h1>
                                 </div>
                                 <div className="flex justify-between items-end mt-4 relative z-10">
-                                    <span className="text-xl font-bold text-orange-100 mb-2">ยอดรวม</span>
-                                    <span className="text-[4.5rem] leading-none font-black tracking-tighter drop-shadow-md">฿{totalPrice}</span>
+                                    <span className="text-lg font-bold opacity-90 uppercase">ยอดเงินรวม</span>
+                                    <span className="text-7xl font-black tracking-tighter leading-none drop-shadow-lg">฿{totalPrice}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto px-5 pb-[160px] pt-3 no-scrollbar">
-                            <div className="grid grid-cols-2 gap-5 pb-10">
-                                {products.map(flavor => {
-                                    const qty = cart[flavor.id] || 0;
-                                    const isSelected = qty > 0;
+                        <div className="flex-1 overflow-y-auto px-4 safe-area-staff no-scrollbar">
+                            <div className="grid grid-cols-2 gap-4 pb-6">
+                                {products.map(p => {
+                                    const qty = cart[p.id] || 0;
+                                    const isOut = p.stock <= 0;
                                     return (
-                                        <div key={flavor.id} className="relative tap-effect h-[180px]">
-                                            <button onClick={() => { setCart(prev => ({ ...prev, [flavor.id]: (prev[flavor.id] || 0) + 1 })); setPaymentMode(null); }}
-                                                className={`w-full h-full flex flex-col items-center justify-center p-6 rounded-[2.5rem] overflow-hidden transition-all border-2
-                                                ${isSelected ? 'bg-gradient-to-br from-orange-400 to-amber-500 border-orange-400 shadow-xl' : 'bg-white border-transparent shadow-sm hover:border-orange-200'}`}
-                                            >
-                                                <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-3 transition-colors ${isSelected ? 'bg-white/30 backdrop-blur-md shadow-inner' : 'bg-orange-50'}`}>
-                                                    <span className="text-[3.8rem] leading-none animate-float select-none drop-shadow-sm">{flavor.emoji}</span>
-                                                </div>
-                                                <span className={`text-xl font-black tracking-tight line-clamp-1 ${isSelected ? 'text-white drop-shadow-sm' : 'text-amber-950'}`}>{flavor.name}</span>
+                                        <div key={p.id} className="relative h-44 animate-pop">
+                                            <button disabled={isOut || !user} onClick={() => setCart({...cart, [p.id]: qty + 1})}
+                                                className={`w-full h-full rounded-[2.5rem] flex flex-col items-center justify-center border-2 transition-all tap-effect ${qty > 0 ? 'bg-gradient-to-br from-orange-400 to-amber-500 border-orange-400 text-white shadow-xl' : 'bg-white border-transparent shadow-sm'}`}>
+                                                <div className={`w-20 h-20 rounded-full mb-2 flex items-center justify-center transition-colors ${qty > 0 ? 'bg-white/20' : 'bg-orange-50'}`}><span className="text-5xl animate-float">{p.emoji}</span></div>
+                                                <span className="font-black text-xl tracking-tight leading-none mb-1">{p.name}</span>
+                                                <div className={`text-[10px] font-black px-3 py-1 rounded-full ${p.stock < 10 ? 'bg-red-50 text-red-500 animate-pulse' : 'bg-orange-50 text-orange-600'}`}>{isOut ? 'หมด!' : `คงเหลือ: ${p.stock}`}</div>
                                             </button>
-                                            {isSelected && (
-                                                <div onClick={(e) => { e.stopPropagation(); setCart(prev => { const nc = {...prev}; if(nc[flavor.id]>1) nc[flavor.id]--; else delete nc[flavor.id]; return nc; }); }}
-                                                className="absolute top-3 left-3 bg-black/30 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold tap-effect-heavy backdrop-blur-sm z-20 border border-white/20"><Icons.Minus size={26} /></div>
+                                            {qty > 0 && (
+                                                <div onClick={(e) => { e.stopPropagation(); const nc = {...cart}; if(qty > 1) nc[p.id]--; else delete nc[p.id]; setCart(nc); }} className="absolute top-2 left-2 w-11 h-11 bg-black/20 rounded-full flex items-center justify-center text-white backdrop-blur-md tap-effect border border-white/20"><Icons.Minus /></div>
                                             )}
-                                            {isSelected && (
-                                                <div key={qty} className="absolute top-3 right-3 bg-white text-orange-600 w-11 h-11 rounded-full flex items-center justify-center text-2xl font-black shadow-lg animate-pop-spring z-10 border-2 border-orange-500">{qty}</div>
-                                            )}
+                                            {qty > 0 && <div className="absolute top-2 right-2 w-11 h-11 bg-white text-orange-600 rounded-full flex items-center justify-center font-black text-2xl shadow-xl border-2 border-orange-500 pointer-events-none animate-pop">{qty}</div>}
                                         </div>
                                     );
                                 })}
                             </div>
                         </div>
 
-                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#FFF9F0] via-[#FFF9F0] to-transparent pt-12 z-30 transition-transform duration-300 pointer-events-none" style={{ transform: paymentMode ? 'translateY(150%)' : 'translateY(0)' }}>
-                            <div className="grid grid-cols-2 gap-4 safe-pb pointer-events-auto">
-                                <button disabled={totalItems === 0} onClick={() => setPaymentMode('transfer')} className={`flex items-center justify-center gap-3 p-6 rounded-[2.2rem] tap-effect border-2 ${totalItems === 0 ? 'bg-orange-100 text-orange-300 border-orange-100' : 'bg-white border-orange-200 text-amber-950 shadow-lg'}`}>
-                                    <Icons.QrCode size={32} className={totalItems === 0 ? 'opacity-30' : 'text-orange-500'} /><span className="font-black text-2xl tracking-tighter">โอนเงิน</span>
-                                </button>
-                                <button disabled={totalItems === 0} onClick={() => setPaymentMode('cash')} className={`flex items-center justify-center gap-3 p-6 rounded-[2.2rem] tap-effect border-2 border-transparent ${totalItems === 0 ? 'bg-orange-100 text-orange-300' : 'bg-green-500 text-white shadow-xl'}`}>
-                                    <Icons.Banknote size={32} /><span className="font-black text-2xl tracking-tighter">เงินสด</span>
-                                </button>
+                        <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-orange-50 via-orange-50 to-transparent z-30 pointer-events-none">
+                            <div className="max-w-md mx-auto grid grid-cols-2 gap-4 pointer-events-auto transition-transform" style={{ transform: paymentMode ? 'translateY(150%)' : 'translateY(0)' }}>
+                                <button disabled={totalItems === 0 || !user} onClick={() => setPaymentMode('transfer')} className="p-6 rounded-[2.5rem] shadow-2xl flex items-center justify-center gap-3 font-black text-2xl tap-effect border-2 bg-white text-amber-950 border-orange-100"><Icons.QrCode size={30}/> โอนเงิน</button>
+                                <button disabled={totalItems === 0 || !user} onClick={() => setPaymentMode('cash')} className="p-6 rounded-[2.5rem] shadow-2xl flex items-center justify-center gap-3 font-black text-2xl tap-effect premium-header text-white"><Icons.Banknote size={30}/> เงินสด</button>
                             </div>
                         </div>
 
-                        <div className={`absolute bottom-0 left-0 right-0 bg-white rounded-t-[3rem] shadow-[0_-15px_50px_rgba(0,0,0,0.15)] transition-transform duration-500 z-50 flex flex-col border-t-2 border-orange-100 max-h-[92vh] ${paymentMode ? 'translate-y-0' : 'translate-y-full'}`}>
-                            <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto mt-4 mb-4 shrink-0"></div>
-                            <div className="px-7 pb-12 flex-1 flex flex-col overflow-y-auto no-scrollbar">
-                                <div className="flex items-center mb-6 shrink-0">
-                                    <button onClick={() => { setPaymentMode(null); setCashReceived(null); }} className="bg-orange-50 p-3 rounded-full text-orange-600 tap-effect border border-orange-100"><Icons.ChevronLeft size={30} /></button>
-                                    <h3 className="flex-1 text-center font-black text-3xl text-amber-950 mr-12">{paymentMode === 'transfer' ? 'สแกนจ่าย' : 'รับเงินสด'}</h3>
-                                </div>
-                                <div className="bg-orange-50/50 rounded-[2.5rem] p-8 text-center mb-6 border-2 border-orange-100 shrink-0">
-                                    <p className="text-lg text-orange-700/80 font-bold mb-1 uppercase tracking-widest">ยอดเงินที่ต้องชำระ</p>
-                                    <div className="text-8xl font-black text-amber-950 tracking-tighter">฿{totalPrice}</div>
-                                </div>
-                                {paymentMode === 'cash' && (
-                                    <div className="flex-1">
-                                        <p className="text-xl font-black text-orange-950 mb-3 tracking-tight ml-2">รับเงินมาเท่าไหร่ครับ?</p>
-                                        <div className="grid grid-cols-2 gap-4 mb-6">
-                                            {quickCashOptions.map(amount => (
-                                                <button key={amount} onClick={() => setCashReceived(amount)} className={`py-5 rounded-[1.8rem] font-black text-3xl tap-effect border-2 transition-all ${cashReceived === amount ? 'bg-orange-500 text-white border-orange-500 shadow-xl ring-4 ring-orange-100' : 'bg-white text-amber-950 border-orange-200 hover:border-orange-400'}`}>{amount === totalPrice ? 'พอดี' : amount}</button>
-                                            ))}
-                                        </div>
-                                        {cashReceived !== null && (
-                                            <div className={`p-7 rounded-[2.5rem] flex justify-between items-center border-2 animate-joy ${change >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                                                <span className="text-2xl font-black">เงินทอน</span>
-                                                <span className="text-6xl font-black tracking-tighter">{change >= 0 ? `฿${change}` : 'เงินไม่พอ!'}</span>
+                        {paymentMode && (
+                            <div className="fixed inset-0 bg-black/40 z-50 flex items-end" onClick={() => { if(!isSubmitting) { setPaymentMode(null); setCashReceived(null); } }}>
+                                <div className="bg-white w-full max-w-md mx-auto rounded-t-[3.5rem] p-7 animate-slide-up shadow-2xl flex flex-col max-h-[88vh]" onClick={e => e.stopPropagation()}>
+                                    <div className="w-16 h-1.5 bg-orange-100 rounded-full mx-auto mb-6 shrink-0"></div>
+                                    <div className="flex items-center mb-4 shrink-0 px-2">
+                                        {!isSubmitting && (
+                                            <button onClick={() => { setPaymentMode(null); setCashReceived(null); }} className="bg-orange-50 p-3 rounded-full text-orange-600 tap-effect border border-orange-100"><Icons.ChevronLeft /></button>
+                                        )}
+                                        <h3 className="flex-1 text-center font-black text-3xl text-amber-950 mr-12 uppercase italic tracking-tighter">Payment</h3>
+                                    </div>
+                                    <div className="bg-orange-50 rounded-[2.5rem] p-6 text-center mb-4 border-4 border-orange-100 shrink-0 mx-1 shadow-inner">
+                                        <p className="text-sm text-orange-700 font-bold mb-0 uppercase tracking-widest leading-none">Net Total</p>
+                                        <div className="text-7xl font-black text-amber-950 py-1 tracking-tighter">฿{totalPrice}</div>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto no-scrollbar px-1 pb-4">
+                                        {paymentMode === 'cash' && (
+                                            <div className="mb-4 animate-joy">
+                                                <p className="text-base font-black text-orange-950 mb-3 px-1 uppercase opacity-70">รับเงินสดมา:</p>
+                                                <div className="grid grid-cols-2 gap-3 mb-4">
+                                                    {quickCashOptions.map(amount => (
+                                                        <button key={amount} onClick={() => setCashReceived(amount)} className={`py-5 rounded-3xl font-black text-3xl border-2 transition-all tap-effect ${cashReceived === amount ? 'bg-orange-500 text-white border-orange-500 shadow-xl ring-4 ring-orange-100 scale-105' : 'bg-white text-amber-950 border-orange-200'}`}>{amount === totalPrice ? 'พอดี' : amount}</button>
+                                                    ))}
+                                                </div>
+                                                {cashReceived !== null && (
+                                                    <div className={`p-6 rounded-[2.5rem] flex justify-between items-center border-4 animate-joy ${change >= 0 ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'}`}>
+                                                        <span className="text-2xl font-black text-gray-700">เงินทอน</span>
+                                                        <span className={`text-6xl font-black tracking-tighter ${change >= 0 ? 'text-green-600' : 'text-red-500'}`}>{change >= 0 ? `฿${change}` : 'ไม่พอ!'}</span>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </div>
-                                )}
-                                <div className="mt-8 shrink-0 safe-pb">
-                                    <button onClick={handleCheckout} disabled={isSubmitting || (paymentMode === 'cash' && (cashReceived === null || change < 0))}
-                                        className={`w-full py-6 rounded-[2.5rem] font-black text-2xl tap-effect flex items-center justify-center gap-3 transition-all
-                                        ${(isSubmitting || (paymentMode === 'cash' && (cashReceived === null || change < 0))) ? 'bg-orange-100 text-orange-300' : 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-xl shadow-orange-400/40'}`}>
-                                        {isSubmitting ? <span className="flex items-center gap-3"><Icons.Refresh size={24} className="animate-spin-custom" /> กำลังบันทึก...</span> : 'เสร็จสิ้น (ปิดบิล)'}
-                                    </button>
+                                    <div className="pt-2 shrink-0 pb-12 px-1">
+                                        <button disabled={isSubmitting || !user || (paymentMode === 'cash' && (cashReceived === null || change < 0))} onClick={handleCheckout} 
+                                            className={`w-full py-6 rounded-[2.5rem] font-black text-3xl shadow-2xl transition-all tap-effect flex items-center justify-center gap-4 ${(isSubmitting || !user || (paymentMode === 'cash' && (cashReceived === null || change < 0))) ? 'bg-orange-100 text-orange-300 shadow-none' : 'premium-header text-white shadow-orange-500/40'}`}>
+                                            {isSubmitting ? <Icons.Refresh className="animate-spin" size={32} /> : 'บันทึกออเดอร์'}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
+
+                        {showLogin && (
+                            <div className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-6 animate-joy backdrop-blur-sm" onClick={() => setShowLogin(false)}>
+                                <div className="bg-white w-full max-w-sm rounded-[3.5rem] p-9 shadow-2xl border-4 border-orange-100" onClick={e => e.stopPropagation()}>
+                                    <div className="flex flex-col items-center mb-8">
+                                        <div className="w-20 h-20 bg-orange-100 rounded-3xl flex items-center justify-center text-orange-600 mb-4 animate-float"><Icons.Settings size={40} /></div>
+                                        <h3 className="text-3xl font-black text-center text-amber-950 uppercase tracking-tighter">Admin Login</h3>
+                                    </div>
+                                    <form onSubmit={checkAdminPassword} className="space-y-6">
+                                        <input autoFocus type="password" placeholder="••••" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full text-center bg-orange-50 border-2 border-orange-100 p-5 rounded-3xl font-black text-5xl focus:border-orange-500 outline-none transition-all shadow-inner tracking-widest" />
+                                        <button type="submit" className="w-full premium-header text-white py-5 rounded-3xl font-black text-2xl shadow-xl shadow-orange-200 active:scale-95 transition-all">ยืนยัน</button>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 );
             }
 
+            // VIEW: ADMIN
             if (appMode === 'admin') {
                 return (
-                    <div className="flex flex-col h-screen bg-white max-w-md mx-auto relative font-sans select-none">
-                        <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 pt-14 pb-8 flex justify-between items-center z-20 shadow-lg rounded-b-[3.5rem]">
-                            <div><h2 className="text-3xl font-black tracking-tight leading-none">Admin</h2><p className="text-orange-100 font-bold text-sm mt-2 opacity-90 flex items-center gap-1.5"><Icons.Store size={14} /> PANG..WOW..WOW</p></div>
-                            <button onClick={() => setAppMode(null)} className="bg-white/20 p-3.5 rounded-2xl backdrop-blur-md border border-white/30 tap-effect hover:bg-white/30 transition-colors"><Icons.LogOut size={24} /></button>
+                    <div className="max-w-md mx-auto h-screen flex flex-col bg-[#FFFAF5] font-sans relative select-none overflow-hidden">
+                        {toast && (
+                            <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white px-8 py-3 rounded-full shadow-2xl animate-island flex items-center justify-center gap-3 font-bold border border-white/20 whitespace-nowrap">
+                                <Icons.CloudCheck size={20} className="text-green-400" /> {toast}
+                            </div>
+                        )}
+
+                        <div className="premium-header text-white px-6 pt-12 pb-7 flex justify-between items-center z-20 shadow-xl rounded-b-[3.5rem] shrink-0 border-b-4 border-white/20">
+                            <div><h2 className="text-3xl font-black leading-none uppercase tracking-tighter">Admin Center</h2><p className="text-white/80 font-bold text-xs mt-2 uppercase tracking-widest bg-black/20 px-3 py-1 rounded-full inline-block">Real-time Cloud</p></div>
+                            <button onClick={() => setAppMode('staff')} className="bg-white/20 p-4 rounded-3xl backdrop-blur-md border border-white/30 tap-effect hover:bg-white/40 shadow-lg"><Icons.LogOut size={26} /></button>
                         </div>
-                        <div className="flex-1 overflow-hidden relative z-10 flex flex-col bg-orange-50/20">
+
+                        <div className="flex-1 overflow-hidden relative z-10 flex flex-col">
                             {adminTab === 'dashboard' && (
-                                <div className="flex-1 overflow-y-auto p-6 pb-32 no-scrollbar relative">
-                                    {isLoadingData && (
-                                        <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-black/80 text-white px-5 py-2 rounded-full text-sm font-black shadow-xl z-50 animate-pop-spring flex items-center gap-2">
-                                            <Icons.Refresh size={16} className="animate-spin-custom" /> กำลังดึงข้อมูลล่าสุด...
-                                        </div>
-                                    )}
-
-                                    <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-orange-100 mb-7 relative overflow-hidden animate-joy">
-                                        <div className="absolute top-0 left-0 w-2.5 h-full bg-orange-500"></div>
-                                        <div className="flex justify-between items-center mb-2">
-                                            <h3 className="font-black text-amber-950 flex items-center gap-2"><Icons.MapPin size={20} className="text-orange-500"/> ทำเลวันนี้</h3>
-                                            {!isEditingLocation && <button onClick={() => { setTempLocation(storeLocation); setIsEditingLocation(true); }} className="text-orange-600 font-black text-xs tap-effect border-b border-orange-500 pb-0.5">เปลี่ยนทำเล</button>}
-                                        </div>
-                                        {!isEditingLocation ? <p className="text-3xl font-black text-orange-600 tracking-tight leading-none">{storeLocation}</p> : (
-                                            <form onSubmit={handleUpdateLocation} className="flex gap-2 mt-4 animate-joy"><input autoFocus value={tempLocation} onChange={(e) => setTempLocation(e.target.value)} className="flex-1 bg-gray-50 border-2 border-gray-100 rounded-2xl p-4 font-bold focus:border-orange-500 outline-none transition-all" /><button type="submit" className="bg-orange-500 text-white px-6 rounded-2xl font-black shadow-lg shadow-orange-200 active:scale-95 transition-transform">เซฟ</button></form>
+                                <div className="flex-1 overflow-y-auto p-6 no-scrollbar animate-joy admin-content-scroll">
+                                    <div className="bg-white p-7 rounded-[3rem] shadow-sm border-2 border-orange-100 mb-6 relative overflow-hidden animate-pop">
+                                        <div className="absolute top-0 left-0 w-3 h-full premium-header"></div>
+                                        <h3 className="font-black text-slate-400 flex items-center gap-2 mb-3 uppercase tracking-widest text-xs"><Icons.MapPin size={18} className="text-orange-500"/> Current Location</h3>
+                                        {!isEditingLocation ? <p className="text-4xl font-black text-orange-600 tracking-tighter leading-none">{storeLocation}</p> : (
+                                            <form onSubmit={handleUpdateLocation} className="flex gap-2 mt-4 animate-joy"><input autoFocus value={tempLocation} onChange={(e) => setTempLocation(e.target.value)} className="flex-1 bg-orange-50 border-2 border-orange-100 rounded-3xl p-5 font-black focus:border-orange-500 outline-none" /><button type="submit" className="premium-header text-white px-7 rounded-3xl font-black shadow-lg">เซฟ</button></form>
                                         )}
+                                        {!isEditingLocation && <button onClick={() => { setTempLocation(storeLocation); setIsEditingLocation(true); }} className="absolute top-8 right-8 text-orange-600 font-black text-xs tap-effect border-b-2 border-orange-400">Edit</button>}
                                     </div>
-
-                                    <div className="flex justify-between items-center mb-6 px-1">
-                                        <h2 className="text-2xl font-black text-amber-950 flex items-center gap-2 tracking-tight">
-                                            <Icons.Refresh onClick={() => fetchSalesData()} className={`text-orange-500 tap-effect ${isLoadingData ? 'animate-spin-custom' : ''}`} size={24} /> สรุปผลขาย
-                                        </h2>
-                                        <div className="relative">
-                                            <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="bg-white border-2 border-orange-200 text-orange-700 font-black rounded-2xl px-4 py-2 pr-8 shadow-sm appearance-none min-w-[150px] text-center focus:border-orange-500 outline-none transition-colors">
-                                                {availableDates.map(d => (<option key={d} value={d}>{d === new Date().toLocaleDateString('th-TH') ? 'วันนี้' : d}</option>))}
-                                            </select>
-                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-orange-500"><Icons.ChevronLeft size={14} className="rotate-[270deg]" /></div>
-                                        </div>
+                                    <div className="grid grid-cols-2 gap-4 mb-8">
+                                        <div className="premium-header text-white p-7 rounded-[3.5rem] shadow-2xl shadow-orange-500/30 transform hover:scale-[1.03] transition-all"><p className="text-white/80 font-black text-xs uppercase mb-2 tracking-widest">Revenue Today</p><p className="text-5xl font-black tracking-tighter">฿{dashboardStats.revenue}</p></div>
+                                        <div className="bg-white text-slate-800 p-7 rounded-[3.5rem] shadow-md border-2 border-orange-50 transform hover:scale-[1.03] transition-all"><p className="text-orange-600/60 font-black text-xs uppercase mb-2 tracking-widest">Items Sold</p><p className="text-5xl font-black tracking-tighter">{dashboardStats.itemsSold}</p></div>
                                     </div>
-
-                                    <div className="grid grid-cols-2 gap-5 mb-8">
-                                        <div className="bg-gradient-to-br from-orange-500 to-amber-600 text-white p-7 rounded-[2.8rem] shadow-xl shadow-orange-200/50 transform hover:scale-[1.02] transition-transform"><p className="text-orange-100 font-bold text-sm mb-1 uppercase tracking-widest opacity-80">ยอดเงินรวม</p><p className="text-4xl font-black tracking-tighter leading-none">฿{dashboardStats.revenue}</p></div>
-                                        <div className="bg-white text-amber-950 p-7 rounded-[2.8rem] shadow-sm border border-orange-50 transform hover:scale-[1.02] transition-transform"><p className="text-orange-600 font-bold text-sm mb-1 uppercase tracking-widest opacity-80">จำนวนชิ้น</p><p className="text-4xl font-black tracking-tighter leading-none">{dashboardStats.itemsSold}</p></div>
+                                    <h3 className="text-2xl font-black text-amber-950 mb-5 ml-2 uppercase tracking-tighter flex items-center gap-2 opacity-60 italic">Daily Best Sellers</h3>
+                                    <div className="bg-white rounded-[3.5rem] p-4 shadow-xl border-2 border-orange-50">
+                                        {products.map(p => (
+                                            <div key={p.id} className="flex items-center justify-between p-5 border-b border-orange-50 last:border-0 rounded-3xl hover:bg-orange-50/50 transition-all">
+                                                <div className="flex items-center gap-5"><span className="text-4xl bg-orange-100/50 w-16 h-16 flex items-center justify-center rounded-3xl shadow-inner animate-float">{p.emoji}</span><span className="font-black text-slate-700 text-xl tracking-tighter leading-none">{p.name}</span></div>
+                                                <div className="font-black text-orange-600 bg-orange-100/60 px-5 py-2.5 rounded-2xl text-2xl animate-pop">{dashboardStats.itemCounts[p.id] || 0}</div>
+                                            </div>
+                                        ))}
                                     </div>
+                                </div>
+                            )}
 
-                                    <h3 className="text-xl font-black text-amber-950 mb-4 tracking-tight ml-1">🏆 อันดับไส้ขายดี</h3>
-                                    <div className="bg-white rounded-[2.8rem] p-4 shadow-sm border border-orange-50 mb-10 overflow-hidden">
-                                        {dashboardStats.topSelling.length === 0 ? <div className="text-center text-orange-200 py-12 flex flex-col items-center"><Icons.PackageOpen size={60} className="mb-4 opacity-20"/><span className="font-bold text-xl">ไม่มีข้อมูลการขายจ้า</span></div> : 
-                                            dashboardStats.topSelling.map((item, idx) => (
-                                                <div key={idx} className="flex items-center justify-between p-5 border-b border-orange-50 last:border-0 rounded-3xl hover:bg-orange-50/40 transition-colors animate-joy">
-                                                    <div className="flex items-center gap-5"><span className="text-[3rem] bg-orange-100/50 w-16 h-16 flex items-center justify-center rounded-2xl shadow-inner">{item.emoji}</span><span className="font-black text-amber-950 text-xl tracking-tight">{item.name}</span></div>
-                                                    <div className="font-black text-orange-600 bg-orange-100/60 px-5 py-2 rounded-2xl text-2xl">{item.qty} ชิ้น</div>
+                            {adminTab === 'stock' && (
+                                <div className="flex-1 overflow-y-auto p-6 no-scrollbar animate-joy admin-content-scroll">
+                                    <h2 className="text-3xl font-black text-amber-950 mb-8 ml-2 uppercase tracking-tighter flex items-center gap-3 italic"><Icons.Package size={32} className="text-orange-500" /> Inventory</h2>
+                                    <div className="grid gap-5 pb-20">
+                                        {products.map(p => {
+                                            const isFlashing = flashingStockId === p.id;
+                                            return (
+                                                <div key={p.id} className={`bg-white p-6 rounded-[3.5rem] shadow-lg border-2 border-orange-50 flex items-center justify-between transition-all duration-500 h-32 ${isFlashing ? 'success-flash border-green-500 border-4 scale-[1.02]' : ''}`}>
+                                                    <div className="flex items-center gap-5">
+                                                        <span className="text-5xl bg-orange-50 w-20 h-20 flex items-center justify-center rounded-[2rem] shadow-inner animate-float">{p.emoji}</span>
+                                                        <div>
+                                                            <p className="font-black text-2xl text-slate-800 tracking-tighter leading-none mb-1">{p.name}</p>
+                                                            <p className={`text-xl font-black ${p.stock < 10 ? 'text-red-500 animate-pulse' : 'text-slate-400 opacity-80'}`}>Stock: {p.stock}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                        <button onClick={() => updateCloudStock(p.id, -5)} className="w-14 h-14 bg-slate-100 rounded-3xl font-black text-2xl text-slate-500 tap-effect shadow-inner">-5</button>
+                                                        <button onClick={() => updateCloudStock(p.id, 10)} className="w-14 h-14 premium-header rounded-3xl font-black text-2xl text-white tap-effect shadow-xl shadow-orange-500/20 active:scale-125">+10</button>
+                                                    </div>
                                                 </div>
-                                            ))
-                                        }
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             )}
 
                             {adminTab === 'settings' && (
-                                <div className="flex-1 overflow-y-auto p-6 pb-32 no-scrollbar bg-white">
-                                    <div className="flex justify-between items-center mb-8 px-1">
-                                        <h2 className="text-3xl font-black text-amber-950 tracking-tight leading-none">เมนูร้าน</h2>
-                                        <button onClick={() => setEditingProduct({})} className="bg-orange-500 text-white p-4 rounded-2xl shadow-xl tap-effect hover:bg-orange-600 transition-colors"><Icons.Plus size={30} /></button>
-                                    </div>
+                                <div className="flex-1 overflow-y-auto p-6 no-scrollbar bg-white animate-joy admin-content-scroll">
+                                    <div className="flex justify-between items-center mb-8 px-2"><h2 className="text-4xl font-black text-amber-950 uppercase tracking-tighter italic">Menus</h2><button onClick={() => startEditingProduct({})} className="premium-header text-white p-5 rounded-3xl tap-effect shadow-2xl hover:rotate-90 transition-all"><Icons.Plus size={32} /></button></div>
                                     {editingProduct !== null && (
-                                        <div className="bg-[#fff9f0] p-8 rounded-[3rem] shadow-2xl mb-10 border-4 border-orange-100 animate-joy">
-                                            <h3 className="font-black text-2xl mb-6 text-amber-950">{editingProduct.id ? 'แก้ไขข้อมูล' : 'เพิ่มเมนูใหม่'}</h3>
+                                        <div className="bg-orange-50/50 p-8 rounded-[4rem] shadow-2xl mb-12 border-4 border-orange-100 animate-slide-up">
+                                            <h3 className="font-black text-3xl mb-8 text-amber-950 text-center tracking-tighter">{editingProduct.id ? '🛠️ Edit Product' : '✨ New Product'}</h3>
                                             <form onSubmit={handleSaveProduct} className="flex flex-col gap-6">
-                                                <div className="space-y-1.5"><label className="text-xs font-black text-orange-800 ml-1 uppercase tracking-widest opacity-60">ชื่อไส้ขนมปัง</label><input required name="name" defaultValue={editingProduct.name} className="bg-white border-2 border-orange-100 p-5 rounded-2xl font-bold focus:border-orange-500 outline-none w-full shadow-sm text-lg transition-all" /></div>
-                                                <div className="grid grid-cols-2 gap-5">
-                                                    <div className="space-y-1.5"><label className="text-xs font-black text-orange-800 ml-1 uppercase tracking-widest opacity-60">ราคาขาย</label><input required name="price" type="number" defaultValue={editingProduct.price || 25} className="bg-white border-2 border-orange-100 p-5 rounded-2xl font-black focus:border-orange-500 outline-none w-full shadow-sm text-lg transition-all" /></div>
-                                                    <div className="space-y-1.5"><label className="text-xs font-black text-orange-800 ml-1 uppercase tracking-widest opacity-60">ไอคอน</label><input name="emoji" defaultValue={editingProduct.emoji} className="bg-white border-2 border-orange-100 p-5 rounded-2xl text-center text-5xl focus:border-orange-500 outline-none w-full shadow-sm transition-all" /></div>
+                                                <div className="space-y-2 px-1"><label className="text-xs font-black text-orange-800 ml-2 uppercase opacity-60">Flavor Name</label><input required name="name" defaultValue={editingProduct.name} className="bg-white border-2 border-orange-100 p-5 rounded-[2rem] font-black text-2xl focus:border-orange-500 outline-none w-full" /></div>
+                                                <div className="grid grid-cols-2 gap-5 px-1">
+                                                    <div className="space-y-2"><label className="text-xs font-black text-orange-800 ml-2 uppercase opacity-60">Price (฿)</label><input required name="price" type="number" defaultValue={editingProduct.price || 25} className="bg-white border-2 border-orange-100 p-5 rounded-[2rem] font-black text-2xl focus:border-orange-500 outline-none w-full" /></div>
+                                                    <div className="space-y-2"><label className="text-xs font-black text-orange-800 ml-2 uppercase opacity-60">Icon</label><div className="bg-white border-2 border-orange-100 p-4 rounded-[2rem] text-center text-6xl leading-none animate-float">{selectedEmoji}</div></div>
                                                 </div>
-                                                <div className="flex gap-4 pt-2"><button type="button" onClick={() => setEditingProduct(null)} className="flex-1 bg-white p-5 rounded-2xl font-black text-gray-400 border border-gray-100 tap-effect shadow-sm">ยกเลิก</button><button type="submit" className="flex-1 bg-orange-500 text-white p-5 rounded-2xl font-black shadow-lg shadow-orange-200">บันทึก</button></div>
+                                                <div className="space-y-2 px-1">
+                                                    <label className="text-xs font-black text-orange-800 ml-2 uppercase opacity-60 text-center w-full block">👉 Select Icon Below</label>
+                                                    <div className="emoji-grid-picker no-scrollbar shadow-inner">
+                                                        {EMOJI_OPTIONS.map(emo => (
+                                                            <div key={emo} onClick={() => setSelectedEmoji(emo)} className={`flex items-center justify-center text-4xl p-2 rounded-2xl tap-effect transition-all ${selectedEmoji === emo ? 'bg-orange-500 border-4 border-white shadow-xl scale-125 z-10' : 'hover:bg-orange-100'}`}>{emo}</div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-4 pt-5 px-1 pb-4"><button type="button" onClick={() => setEditingProduct(null)} className="flex-1 bg-white p-5 rounded-[2rem] font-black text-xl text-gray-500 tap-effect border-2 border-gray-200">Cancel</button><button type="submit" className="flex-1 premium-header text-white p-5 rounded-[2rem] font-black text-xl shadow-xl tap-effect uppercase">Save</button></div>
                                             </form>
                                         </div>
                                     )}
-                                    <div className="flex flex-col gap-5">
-                                        {products.map(product => (
-                                            <div key={product.id} className="bg-white p-5 rounded-[2.2rem] flex items-center justify-between shadow-sm border border-orange-50 hover:shadow-md hover:border-orange-200 transition-all">
-                                                <div className="flex items-center gap-5"><div className="w-20 h-20 bg-orange-100/50 rounded-2xl flex items-center justify-center text-[3.2rem] shadow-inner p-2">{product.emoji}</div><div><p className="font-black text-amber-950 text-2xl tracking-tight leading-none">{product.name}</p><p className="font-black text-orange-500 mt-1">฿{product.price}</p></div></div>
-                                                <div className="flex gap-3"><button onClick={() => setEditingProduct(product)} className="p-4 bg-orange-50 text-orange-600 rounded-2xl tap-effect border border-orange-100 hover:bg-orange-100 transition-colors"><Icons.Edit size={24} /></button><button onClick={() => handleDeleteProduct(product.id)} className="p-4 bg-red-50 text-red-500 rounded-2xl tap-effect border border-red-100 hover:bg-red-100 transition-colors"><Icons.Trash size={24} /></button></div>
+                                    <div className="flex flex-col gap-6">
+                                        {products.map(p => (
+                                            <div key={p.id} className="bg-white p-7 rounded-[3.5rem] flex items-center justify-between shadow-sm border-2 border-orange-50 hover:border-orange-200 transition-all group">
+                                                <div className="flex items-center gap-6"><div className="w-24 h-24 bg-orange-100/50 rounded-[2.5rem] flex items-center justify-center text-[4.5rem] leading-none">{p.emoji}</div><div><p className="font-black text-amber-950 text-2xl tracking-tighter">{p.name}</p><p className="font-black text-orange-500 mt-2 text-2xl">฿{p.price}</p></div></div>
+                                                <div className="flex gap-4"><button onClick={() => startEditingProduct(p)} className="p-5 bg-orange-50 text-orange-600 rounded-3xl tap-effect border-2 border-orange-100"><Icons.Edit size={28} /></button><button onClick={async () => { if(confirm('Delete this?')) { const { db, appId, doc, deleteDoc } = window.FirebaseCloud; await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bread_products', p.id)); showToast('ลบเรียบร้อย! 🗑️'); } }} className="p-5 bg-red-50 text-red-500 rounded-3xl tap-effect border-2 border-red-100"><Icons.Trash size={28} /></button></div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             )}
                         </div>
-                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-10 py-6 rounded-[2.8rem] shadow-2xl flex gap-12 z-30 border border-white/10 scale-105 animate-joy">
-                            <button onClick={() => setAdminTab('dashboard')} className={`flex flex-col items-center gap-2 transition-all tap-effect ${adminTab === 'dashboard' ? 'text-orange-400 scale-110' : 'text-gray-500 hover:text-white'}`}><Icons.Dashboard size={32} /><span className="text-[10px] font-black uppercase tracking-widest">Dashboard</span></button>
+
+                        {/* Admin Bottom Navigation (Premium Glass Island) */}
+                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 glass-island px-12 py-7 rounded-[4rem] shadow-[0_25px_60px_rgba(0,0,0,0.6)] flex gap-14 z-50 border-2 border-white/10 scale-105 animate-joy shadow-orange-900/30">
+                            <button onClick={() => setAdminTab('dashboard')} className={`flex flex-col items-center gap-2 transition-all tap-effect ${adminTab === 'dashboard' ? 'text-orange-400 scale-125' : 'text-slate-500 opacity-60'}`}><Icons.Dashboard size={32} /><span className="text-[10px] font-black uppercase tracking-widest mt-1">Stats</span></button>
                             <div className="w-[1px] bg-white/10 h-10 self-center"></div>
-                            <button onClick={() => setAdminTab('settings')} className={`flex flex-col items-center gap-2 transition-all tap-effect ${adminTab === 'settings' ? 'text-orange-400 scale-110' : 'text-gray-500 hover:text-white'}`}><Icons.Settings size={32} /><span className="text-[10px] font-black uppercase tracking-widest">Settings</span></button>
+                            <button onClick={() => setAdminTab('stock')} className={`flex flex-col items-center gap-2 transition-all tap-effect ${adminTab === 'stock' ? 'text-orange-400 scale-125' : 'text-slate-500 opacity-60'}`}><Icons.Package size={32} /><span className="text-[10px] font-black uppercase tracking-widest mt-1">Stock</span></button>
+                            <div className="w-[1px] bg-white/10 h-8 self-center"></div>
+                            <button onClick={() => setAdminTab('settings')} className={`flex flex-col items-center gap-2 transition-all tap-effect ${adminTab === 'settings' ? 'text-orange-400 scale-125' : 'text-slate-500 opacity-60'}`}><Icons.Settings size={32} /><span className="text-[10px] font-black uppercase tracking-widest mt-1">Menu</span></button>
                         </div>
                     </div>
                 );
